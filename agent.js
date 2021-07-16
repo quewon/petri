@@ -19,6 +19,9 @@ class Agent {
     let x = Math.round(this.position.x);
     let y = Math.round(this.position.y);
     c.fillRect(x, y, this.size, this.size);
+    // c.beginPath();
+    // c.arc(this.position.x, this.position.y, this.size, 0, 2 * Math.PI);
+    // c.fill();
 
     if (x < 0) x = width + x;
     if (x >= width) x = x - width;
@@ -27,23 +30,18 @@ class Agent {
 
     data[y][x] = 1;
 
-    // if (x >= 0 && x < width && y >= 0 && y < height) {
-    //   data[y][x] = 1;
-    //   // if (y+1 < height) data[y+1][x] += 0.1;
-    //   // if (y-1 >= 0) data[y-1][x] += 0.1;
-    //   // if (x+1 < width) data[y][x+1] += 0.1;
-    //   // if (x-1 >= 0) data[y][x-1] += 0.1;
-    // }
+    let py = y+1 >= height ? 1 : y+1;
+    let my = y-1 < 0 ? height-1 : y-1;
+    let px = x+1 >= width ? 1 : x+1;
+    let mx = x-1 < 0 ? width-1 : x-1;
 
-    // c.beginPath();
-    // c.arc(this.position.x, this.position.y, this.size, 0, 2 * Math.PI);
-    // c.fill();
+    data[py][x] = 0.1;
+    data[my][x] = 0.1;
+    data[y][px] = 0.1;
+    data[y][mx] = 0.1; 
   }
 
   update(dt) {
-    // this.size += (Math.random() - 0.5) * 0.1;
-    // this.size = clamp(this.size, 1, 2);
-
     // follow trails
     let weightForward = this.sense(0);
     let weightLeft = this.sense(this.sensorAngleOffset);

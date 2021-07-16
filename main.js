@@ -4,8 +4,8 @@ var debugcanvas = document.getElementById("debug");
 var c = canvas.getContext("2d");
 var cc = clone.getContext("2d");
 var debug = debugcanvas.getContext("2d");
-var width = window.innerWidth * 2;
-var height = window.innerHeight * 2;
+var width = window.innerWidth*2;
+var height = window.innerHeight*2;
 var mouse = {
   x: 0,
   y: 0,
@@ -13,7 +13,7 @@ var mouse = {
 var Config = {
   size: 1,
   timer: 5,
-  agents: 10000,
+  agents: 20000,
   speed: 1,
   debug: false,
 
@@ -35,23 +35,25 @@ function init() {
     mouse.y = e.clientY;
   };
 
-  Config.bg = "#fff";
-  for (let i=0; i<Config.agents; i++) {
-    agents.push(new Agent({
-      position: { x: Math.random() * width, y: Math.random() * height },
-      speed: 5,
-      sensorSize: 2,
-      sensorDistance: 100,
-      turnSpeed: 10,
-      color: "lightgreen"
-    }))
-  }
+  // crayon
+  // Config.bg = "#fff";
+  // for (let i=0; i<Config.agents; i++) {
+  //   agents.push(new Agent({
+  //     position: { x: Math.random() * width, y: Math.random() * height },
+  //     speed: 5,
+  //     sensorSize: 2,
+  //     sensorDistance: 100,
+  //     turnSpeed: 10,
+  //     color: "lightgreen"
+  //   }))
+  // }
 
+  // plasma
   // for (let i=0; i<Config.agents; i++) {
   //   if (Math.random() > 0.5) {
   //     agents.push(new Agent({
-  //       position: { x: Math.random() * width, y: Math.random() * height },
-  //       speed: 5,
+  //       position: { x: width/2, y: height/2 },
+  //       speed: 1,
   //       sensorSize: 2,
   //       sensorDistance: 100,
   //       turnSpeed: 10,
@@ -59,38 +61,58 @@ function init() {
   //     }));
   //   } else {
   //     agents.push(new Agent({
-  //       position: { x: Math.random() * width, y: Math.random() * height },
-  //       speed: 5,
-  //       sensorSize: 2,
-  //       sensorDistance: 100,
-  //       turnSpeed: 10,
+  //       position: { x: width/2, y: height/2 },
+  //       speed: 1,
+  //       sensorSize: 5,
+  //       sensorDistance: 10,
+  //       turnSpeed: 1,
   //       color: "pink"
   //     }));
   //   }
   // }
 
+  // xray mosaic
+  // Config.agents = 10000;
+  // for (let i=0; i<Config.agents; i++) {
+  //   agents.push(new Agent({
+  //     position: { x: Math.random() * width, y: Math.random() * height },
+  //     speed: 35,
+  //     sensorSize: 5,
+  //     sensorDistance: 300,
+  //     turnSpeed: 25,
+  //     color: "lightblue"
+  //   }));
+  // }
+
+  // blood vessels
+  Config.bg = "#000";
+  sunflower(
+    new Agent({
+      speed: 10,
+      sensorSize: 10,
+      sensorDistance: width/80 + 1,
+      turnSpeed: width/100,
+      color: "green",
+    }),
+    height/3,
+    width/2
+  );
+  sunflower(
+    new Agent({
+      speed: 10,
+      sensorSize: 10,
+      sensorDistance: width/80 + 1,
+      turnSpeed: width/100,
+      color: "blue",
+    }),
+    height/3,
+    width
+  );
+
   for (let y=0; y<height; y++) {
     data[y] = [];
     for (let x=0; x<width; x++) {
       data[y][x] = 0;
-      if (Math.random() > 0.995) {
-        // agents.push(new Agent({
-        //   position: { x: Math.random() * width, y: Math.random() * height },
-        //   speed: 10,
-        //   sensorSize: 2,
-        //   sensorDistance: 200,
-        //   turnSpeed: 10,
-        //   color: randomcolor,
-        // }));
-
-        // agents.push(new Agent({
-        //   position: { x: Math.random() * width, y: Math.random() * height },
-        //   speed: 5,
-        //   sensorSize: 3,
-        //   sensorDistance: 25,
-        //   // color: randomColor(),
-        // }))
-      }
     }
   }
 
@@ -112,7 +134,7 @@ function animate() {
 
   for (let y=0; y<height; y++) {
     for (let x=0; x<width; x++) {
-      data[y][x] -= 0.001;
+      data[y][x] -= 0.05;
       if (data[y][x] < 0) data[y][x] = 0
     }
   }
@@ -131,6 +153,36 @@ function update() {
   }
 
   clock++;
+}
+
+// https://stackoverflow.com/a/28572551/9375514
+function sunflower(agent, circleSize, points, xOffset, yOffset, alpha) {
+  xOffset = xOffset || width/2;
+  yOffset = yOffset || height/2;
+  alpha = alpha || 2;
+  points = points || Config.agents;
+  points += 1;
+  let boundaryPoints = Math.round(alpha*Math.sqrt(points));
+  let phi = (Math.sqrt(5)+1)/2;
+  for (let k=1; k<points; k++) {
+    let r;
+    if (k>points-boundaryPoints) {
+      r = 1
+    } else {
+      r = Math.sqrt(k-1/2)/Math.sqrt(points-(boundaryPoints+1)/2);
+    }
+
+    let theta = 2*Math.PI*k/phi^2;
+    agents.push(new Agent({
+      position: { x:r*Math.cos(theta) * circleSize + xOffset, y:r*Math.sin(theta) * circleSize + yOffset },
+      size: agent.size,
+      speed: agent.speed,
+      sensorSize: agent.sensorSize,
+      sensorDistance: agent.sensorDistance,
+      turnSpeed: agent.turnSpeed,
+      color: agent.color
+    }))
+  }
 }
 
 init();
