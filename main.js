@@ -110,7 +110,7 @@ function init() {
   // );
 
   // sea foam
-  Config.bg = "#487f96";
+  Config.bg = "#2c5566";
   for (let i=0; i<width * 4/5; i++) {
     agents.push(new Agent({
       position: { x: Math.random() * width, y: Math.random() * height },
@@ -127,8 +127,8 @@ function init() {
       position: { x: Math.random() * width, y: Math.random() * height },
       speed: 10,
       sensorSize: 10,
-      sensorDistance: width/80 + 1,
-      turnSpeed: width/100,
+      sensorDistance: width/50 + 1,
+      turnSpeed: width/50,
       color: "#57918b",
     }))
   }
