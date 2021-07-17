@@ -85,29 +85,53 @@ function init() {
   // }
 
   // blood vessels
-  Config.bg = "#000";
-  sunflower(
-    new Agent({
+  // Config.bg = "#000";
+  // sunflower(
+  //   new Agent({
+  //     speed: 10,
+  //     sensorSize: 10,
+  //     sensorDistance: width/80 + 1,
+  //     turnSpeed: width/100,
+  //     color: "#dff3f5",
+  //   }),
+  //   height/3,
+  //   width * 1/3
+  // );
+  // sunflower(
+  //   new Agent({
+  //     speed: 10,
+  //     sensorSize: 10,
+  //     sensorDistance: width/80 + 1,
+  //     turnSpeed: width/100,
+  //     color: "#57918b",
+  //   }),
+  //   height/3,
+  //   width * 2/3
+  // );
+
+  // sea foam
+  Config.bg = "#487f96";
+  for (let i=0; i<width * 4/5; i++) {
+    agents.push(new Agent({
+      position: { x: Math.random() * width, y: Math.random() * height },
       speed: 10,
       sensorSize: 10,
       sensorDistance: width/80 + 1,
       turnSpeed: width/100,
-      color: "green",
-    }),
-    height/3,
-    width/2
-  );
-  sunflower(
-    new Agent({
+      color: "#dff3f5",
+    }))
+  }
+
+  for (let i=0; i<width; i++) {
+    agents.push(new Agent({
+      position: { x: Math.random() * width, y: Math.random() * height },
       speed: 10,
       sensorSize: 10,
       sensorDistance: width/80 + 1,
       turnSpeed: width/100,
-      color: "blue",
-    }),
-    height/3,
-    width
-  );
+      color: "#57918b",
+    }))
+  }
 
   for (let y=0; y<height; y++) {
     data[y] = [];
